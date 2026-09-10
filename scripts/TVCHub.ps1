@@ -1,3 +1,4 @@
+#!/usr/bin/env pwsh
 <#
 .SYNOPSIS
   Create the TVC Hub communication site and, when ready, swap it into the tenant root.
