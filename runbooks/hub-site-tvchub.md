@@ -2,7 +2,7 @@
 
 **Goal:** A Communication site named **TVC Hub**, built at `https://fvcn.sharepoint.com/sites/TVCHub` and then swapped into the tenant root (`https://fvcn.sharepoint.com`) before launch. The root is registered as the hub and home site so each campus site (Fairview, Pottstown, and future campuses) associates to it.
 
-**Script:** `scripts/TVCHub.ps1` runs every step below in phases (`Setup`, `Inspect`, `Create`, `Swap`, `Finish`) with confirmation prompts. It uses PnP.PowerShell so it works from a Mac. The manual commands below use Microsoft's SharePoint Online Management Shell, which only signs in on Windows; each has a PnP equivalent (`Get-PnPTenantSite`, `Invoke-PnPSiteSwap`, `Register-PnPHubSite`, and so on) that the script uses.
+**Browser first.** The section *Browser path* below does everything in the SharePoint admin center. **Script:** `scripts/TVCHub.ps1` runs the same steps in phases (`Setup`, `Inspect`, `Create`, `Swap`, `Finish`) with confirmation prompts. It uses PnP.PowerShell so it works from a Mac. The manual commands below use Microsoft's SharePoint Online Management Shell, which only signs in on Windows; each has a PnP equivalent (`Get-PnPTenantSite`, `Invoke-PnPSiteSwap`, `Register-PnPHubSite`, and so on) that the script uses.
 
 **Order matters.** Do not register `/sites/TVCHub` as a hub before the swap. `Invoke-SPOSiteSwap` refuses a source that is a hub or associated with one.
 
@@ -91,14 +91,53 @@ Replace the campus URLs with the real ones. Get them from `Get-SPOSite -Limit Al
 
 Setting the home site gives the hub the **Home** button in the SharePoint app bar and makes it the Viva Connections landing page in Teams.
 
-## Without PowerShell
+## Browser path (SharePoint admin center)
 
-1. SharePoint admin center > Sites > **Deleted sites**. If TVCHub is listed, select it and **Delete permanently**.
-2. Sites > **Active sites** > **Create** > **Communication site** > Topic. Name `TVC Hub`, site address `TVCHub`. Fix the language and time zone before saving; they cannot be changed later.
-3. Build the site. Do not register it as a hub yet.
-4. Active sites > select the **root** site > **Replace site** > choose TVC Hub, give an archive URL.
-5. Active sites > select the new root > **Hub** > **Register as hub site**. Settings > **Home site** > set the root.
-6. Open each campus site > Settings gear > **Site information** > Hub site association > TVC Hub.
+Everything below can be done at `https://fvcn-admin.sharepoint.com` as a SharePoint Administrator or Global Administrator. No PowerShell needed.
+
+### 1. Inspect
+
+1. In a normal tab, open `https://fvcn.sharepoint.com/sites/TVCHub`.
+   - **"Site not found" (404)** means the URL is free. Good.
+   - **Lands on another site** means a redirect stub is holding the URL. Redirect stubs do not appear in Active sites; see "Clearing a redirect stub" below.
+2. Admin center > Sites > **Deleted sites**. Search `TVCHub`. If listed, select it > **Delete permanently**.
+3. Admin center > Sites > **Active sites**. Note the URL of the root site (first row, `https://fvcn.sharepoint.com`) and of each campus site. Add the **Hub** column via the column chooser to see which sites are hubs or associated to one.
+4. Admin center > **Settings** > **Site creation**. If "Use the form at this URL" is filled in, that is what has been rerouting **+ Create site**. Clear it or leave it; step 2 below bypasses it either way.
+
+### 2. Create
+
+1. Active sites > **+ Create** > **Communication site** > **Standard communication** (Topic).
+2. Site name `TVC Hub`. Site address `TVCHub`. Site owner: you.
+3. Set **Language** and **Time zone** before Finish. Neither can be changed later.
+4. **Finish**. Build content, theme, and navigation. **Do not register it as a hub yet.**
+
+### 3. Swap the root (before launch)
+
+1. Active sites > select the **root site** row (`https://fvcn.sharepoint.com`).
+2. If its Hub column says it is a hub: command bar **Hub** > **Unregister as hub site**.
+3. Command bar > **Replace site**. Choose `https://fvcn.sharepoint.com/sites/TVCHub` as the new root. Give the archive URL `https://fvcn.sharepoint.com/sites/ClassicRoot-Archive`. Confirm.
+   - The Replace site button is only offered when the tenant has fewer than 10,000 sites, which is us.
+   - Both sites are unavailable for several minutes. Never Sunday morning.
+4. When the swap finishes, the classic site is at the archive URL. Active sites > select it > if **Lock state** is not Unlocked, set it to Unlocked so staff can still reach old content.
+5. `/sites/TVCHub` now redirects to the root. That is fine.
+
+### 4. Finish
+
+1. Active sites > select the root site > **Hub** > **Register as hub site**. Name `TVC Hub`. Leave "who can associate" empty so any site owner can.
+2. Settings > **Home site** > set `https://fvcn.sharepoint.com`. This gives the hub the **Home** button in the SharePoint app bar and makes it the Viva Connections landing page in Teams.
+3. For each campus site: Active sites > select it > **Hub** > **Associate with a hub** > TVC Hub. Repeat as campuses are added.
+
+### Clearing a redirect stub
+
+The admin center does not list redirect stubs, so this one step needs PowerShell or a support ticket. From Windows PowerShell:
+
+```powershell
+Connect-SPOService -Url https://fvcn-admin.sharepoint.com
+Remove-SPOSite        -Identity https://fvcn.sharepoint.com/sites/TVCHub
+Remove-SPODeletedSite -Identity https://fvcn.sharepoint.com/sites/TVCHub
+```
+
+Or open a Microsoft 365 support request from the admin center asking them to remove the redirect site at that URL.
 
 ## After launch
 
