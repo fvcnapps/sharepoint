@@ -162,3 +162,7 @@ From the Active sites export the day TVC Hub was created. 39 sites, no hubs anyw
 ### Hub structure
 
 One hub at the root. Top navigation lists campuses first, then departments. Every campus and department site associates with the hub. A new campus is one new site plus one association and one navigation link.
+
+## Status log
+
+- **2026-09-10** TVC Hub created at `/sites/TVCHub` from the admin center. Registered as a hub site. Our service principal apps were added as site admins so automation can manage it app-only. Root swap: pending. Home site: pending. Associations: pending until after the swap, since unregistering a hub for the swap drops every association.
