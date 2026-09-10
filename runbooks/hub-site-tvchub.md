@@ -166,3 +166,8 @@ One hub at the root. Top navigation lists campuses first, then departments. Ever
 ## Status log
 
 - **2026-09-10** TVC Hub created at `/sites/TVCHub` from the admin center. Registered as a hub site. Our service principal apps were added as site admins so automation can manage it app-only. Root swap: pending. Home site: pending. Associations: pending until after the swap, since unregistering a hub for the swap drops every association.
+- **2026-09-10, later** Hub unregistered, Replace site run from the admin center. `https://fvcn.sharepoint.com` is now TVC Hub. Classic root archived at `/sites/ClassicRoot-Archive`; `/sites/TVCHub` redirects to the root. "Register as hub site" was greyed out for a while after the swap (stale hub record), then worked after a fresh sign-in and a wait. Root is registered as the hub. Pending: home site, archive reachability check, Fairview Campus site, associations, theme and navigation.
+
+### Lesson
+
+After Replace site, expect the Hub command to be greyed out on the new root for up to an hour. Sign in fresh and wait. Do not create a second hub or re-run the swap.
