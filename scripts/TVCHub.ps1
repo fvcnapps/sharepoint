@@ -40,8 +40,9 @@ param(
   # Where the old classic root site goes after the swap. Must not exist yet.
   [string]$ArchivePath = '/sites/ClassicRoot-Archive',
 
-  # Campus sites to associate with the hub in the Finish phase. Add campuses here as we grow.
-  [string[]]$CampusPaths = @('/sites/Fairview', '/sites/Pottstown')
+  # Sites to associate with the hub in the Finish phase. Campuses first, then shared department sites.
+  # Fairview has no campus site yet (its content lives on the classic root); add it once created.
+  [string[]]$CampusPaths = @('/sites/PottstownCampus')
 )
 
 $ErrorActionPreference = 'Stop'

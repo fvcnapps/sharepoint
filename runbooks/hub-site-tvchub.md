@@ -83,11 +83,11 @@ Register-SPOHubSite -Site https://fvcn.sharepoint.com -Principals $null
 Set-SPOHomeSite     -HomeSiteUrl https://fvcn.sharepoint.com
 
 # Repeat per campus as we grow.
-Add-SPOHubSiteAssociation -Site https://fvcn.sharepoint.com/sites/Fairview  -HubSite https://fvcn.sharepoint.com
-Add-SPOHubSiteAssociation -Site https://fvcn.sharepoint.com/sites/Pottstown -HubSite https://fvcn.sharepoint.com
+Add-SPOHubSiteAssociation -Site https://fvcn.sharepoint.com/sites/FairviewCampus  -HubSite https://fvcn.sharepoint.com   # create this site first
+Add-SPOHubSiteAssociation -Site https://fvcn.sharepoint.com/sites/PottstownCampus -HubSite https://fvcn.sharepoint.com
 ```
 
-Replace the campus URLs with the real ones. Get them from `Get-SPOSite -Limit All | Select Url, Title`.
+Pottstown's site is `/sites/PottstownCampus`. Fairview has no campus site yet; see the tenant snapshot below.
 
 Setting the home site gives the hub the **Home** button in the SharePoint app bar and makes it the Viva Connections landing page in Teams.
 
@@ -148,3 +148,17 @@ Or open a Microsoft 365 support request from the admin center asking them to rem
 ## Does this affect VillageOps?
 
 No. VillageOps (repo `fvcnapps/tvc-work-orders`) delivers receipts and reports to the FinanceHR site by site ID, not to the root. The root swap does not touch it.
+
+## Tenant snapshot, 2026-09-10
+
+From the Active sites export the day TVC Hub was created. 39 sites, no hubs anywhere.
+
+- **Root** `https://fvcn.sharepoint.com` is a classic team site from 2014. 0.39 GB, 75 files, still seeing a few page views a week (last activity 9/2/2026). Someone uses it. Before the swap, find out who and what, because every link into it breaks when it moves to the archive URL.
+- **TVC Hub** `/sites/TVCHub` created 9/10/2026. Communication site, not a hub, external sharing off. Correct starting state for the swap.
+- **Campus sites.** Pottstown has one: `/sites/PottstownCampus` (Teams-connected). Fairview does not; its content is the classic root. Create `/sites/FairviewCampus` as a peer so the hub navigation treats campuses identically. `/sites/TheVillageNorristown` plus the TVN Leadership and TVN Regular Volunteers sites look like a third location or an outreach ministry. Confirm which before deciding whether it sits at campus level in the hub navigation.
+- **Department sites** (all Teams-connected, created April to July 2026): A/V Production, Adult Ministries, Church Board, Communications, Counseling Center, Early Learning Center, Events, Facilities, Finance / HR, Information Technology, Kids Ministry, Leadership Team, Office Admins, Sunday Services (105 GB), The Village Church - Staff, Worship Arts, Young Adults, Youth Ministry. These are the sites worth associating with the hub so they pick up its theme and top navigation.
+- **Legacy sites** from 2017 to 2021 with 1 GB quotas and no recent activity: Admin, ALLSTAFF, Fairview Online Files, Infant/Toddler, MINISTRY TEAM, Missions Team, PASTORS, PASTORS and DIRECTORS, Prayer Requests, prayerteam, PROGRAMS, SERMONS. Leave them out of the hub. Review for archival after launch.
+
+### Hub structure
+
+One hub at the root. Top navigation lists campuses first, then departments. Every campus and department site associates with the hub. A new campus is one new site plus one association and one navigation link.

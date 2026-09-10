@@ -13,7 +13,7 @@ Application code does not live here. VillageOps is in `fvcnapps/tvc-work-orders`
 
 ## Current work
 
-**TVC Hub** – a Communication site built at `/sites/TVCHub`, swapped into the tenant root before launch, and registered as the hub and home site. Campus sites (Fairview, Pottstown, and future campuses) associate to it.
+**TVC Hub** – a Communication site built at `/sites/TVCHub`, swapped into the tenant root before launch, and registered as the hub and home site. Campus and department sites associate to it. Pottstown is `/sites/PottstownCampus`; Fairview needs a campus site created.
 
 - Runbook: `runbooks/hub-site-tvchub.md`
 - Script: `scripts/TVCHub.ps1` with phases `Setup`, `Inspect`, `Create`, `Swap`, `Finish`
