@@ -2,7 +2,7 @@
 
 **Goal:** A Communication site named **TVC Hub**, built at `https://fvcn.sharepoint.com/sites/TVCHub` and then swapped into the tenant root (`https://fvcn.sharepoint.com`) before launch. The root is registered as the hub and home site so each campus site (Fairview, Pottstown, and future campuses) associates to it.
 
-**Script:** `scripts/TVCHub.ps1` runs every step below in four phases (`Inspect`, `Create`, `Swap`, `Finish`) with confirmation prompts. The manual steps are kept here for reference.
+**Script:** `scripts/TVCHub.ps1` runs every step below in phases (`Setup`, `Inspect`, `Create`, `Swap`, `Finish`) with confirmation prompts. It uses PnP.PowerShell so it works from a Mac. The manual commands below use Microsoft's SharePoint Online Management Shell, which only signs in on Windows; each has a PnP equivalent (`Get-PnPTenantSite`, `Invoke-PnPSiteSwap`, `Register-PnPHubSite`, and so on) that the script uses.
 
 **Order matters.** Do not register `/sites/TVCHub` as a hub before the swap. `Invoke-SPOSiteSwap` refuses a source that is a hub or associated with one.
 
@@ -26,7 +26,7 @@ Three things cause that behavior. Check them in order; the first one that matche
 
 ## Steps
 
-Run in PowerShell (5.1 or 7) as a SharePoint Administrator or Global Administrator.
+Run in Windows PowerShell as a SharePoint Administrator or Global Administrator. On a Mac, use the script instead.
 
 ```powershell
 Install-Module Microsoft.Online.SharePoint.PowerShell -Scope CurrentUser
