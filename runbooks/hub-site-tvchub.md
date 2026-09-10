@@ -155,13 +155,50 @@ From the Active sites export the day TVC Hub was created. 39 sites, no hubs anyw
 
 - **Root** `https://fvcn.sharepoint.com` is a classic team site from 2014. 0.39 GB, 75 files, still seeing a few page views a week (last activity 9/2/2026). Someone uses it. Before the swap, find out who and what, because every link into it breaks when it moves to the archive URL.
 - **TVC Hub** `/sites/TVCHub` created 9/10/2026. Communication site, not a hub, external sharing off. Correct starting state for the swap.
-- **Campus sites.** Pottstown has one: `/sites/PottstownCampus` (Teams-connected). Fairview does not; its content is the classic root. Create `/sites/FairviewCampus` as a peer so the hub navigation treats campuses identically. `/sites/TheVillageNorristown` plus the TVN Leadership and TVN Regular Volunteers sites look like a third location or an outreach ministry. Confirm which before deciding whether it sits at campus level in the hub navigation.
+- **Campus sites.** Pottstown has one: `/sites/PottstownCampus` (Teams-connected). Fairview does not; its content is the classic root. Create `/sites/FairviewCampus` as a peer so the hub navigation treats campuses identically. `/sites/TheVillageNorristown` plus the TVN Leadership and TVN Regular Volunteers sites are an **outreach ministry**, not a campus (confirmed 2026-09-10). They sit under Ministries in the hub navigation.
 - **Department sites** (all Teams-connected, created April to July 2026): A/V Production, Adult Ministries, Church Board, Communications, Counseling Center, Early Learning Center, Events, Facilities, Finance / HR, Information Technology, Kids Ministry, Leadership Team, Office Admins, Sunday Services (105 GB), The Village Church - Staff, Worship Arts, Young Adults, Youth Ministry. These are the sites worth associating with the hub so they pick up its theme and top navigation.
 - **Legacy sites** from 2017 to 2021 with 1 GB quotas and no recent activity: Admin, ALLSTAFF, Fairview Online Files, Infant/Toddler, MINISTRY TEAM, Missions Team, PASTORS, PASTORS and DIRECTORS, Prayer Requests, prayerteam, PROGRAMS, SERMONS. Leave them out of the hub. Review for archival after launch.
 
 ### Hub structure
 
-One hub at the root. Top navigation lists campuses first, then departments. Every campus and department site associates with the hub. A new campus is one new site plus one association and one navigation link.
+One hub at the root. Top navigation lists campuses first, then ministries, then departments. Every campus, ministry, and department site associates with the hub. A new campus is one new site plus one association and one navigation link.
+
+### Hub navigation, first draft
+
+Mission order guides the grouping: Celebrate (worship and services), Connect (campuses and ministries), Care (outreach and support). Labels are what staff say, not site names.
+
+| Top level | Links | Site |
+|-----------|-------|------|
+| **Home** | | `https://fvcn.sharepoint.com` |
+| **Campuses** | Fairview | `/sites/FairviewCampus` (to create) |
+| | Pottstown | `/sites/PottstownCampus` |
+| **Ministries** | Kids | `/sites/KidsMinistry` |
+| | Youth | `/sites/YouthMinistry` |
+| | Young Adults | `/sites/YoungAdultsMin` |
+| | Adults | `/sites/AdultMInistries` |
+| | Worship Arts | `/sites/WorshipArts2` |
+| | Counseling Center | `/sites/CounselingCenter` |
+| | Early Learning Center | `/sites/EarlyLearningCenter` |
+| | The Village Norristown | `/sites/TheVillageNorristown` |
+| | Homeless Ministry | `/sites/homeless.ministry` |
+| **Departments** | Communications | `/sites/Communications` |
+| | Events | `/sites/ExternalEvents` |
+| | Facilities | `/sites/Facilities186` |
+| | Finance / HR | `/sites/FinanceHR` |
+| | Information Technology | `/sites/InformationTechnology` |
+| | Office Admins | `/sites/OfficeAdmins` |
+| | A/V Production | `/sites/AV-Production` |
+| | Sunday Services | `/sites/SundayServices` |
+| **Staff** | Staff Team | `/sites/TheVillageChurch-Staff` |
+| | Leadership Team | `/sites/LeadershipTeam` |
+| | Church Board | `/sites/ChurchBoard` |
+| | VillageOps | work orders app URL |
+
+Notes:
+
+- Staff, Leadership Team, and Church Board are permission-trimmed. Hub navigation shows a link to everyone, but the site denies anyone without access. Use audience targeting on those links so board and leadership items only appear to their members.
+- TVN Leadership and TVN Regular Volunteers stay unlinked. They are working sites for that ministry, reachable from The Village Norristown's own navigation.
+- Legacy sites (Admin, ALLSTAFF, PASTORS, SERMONS, PROGRAMS, and the rest from 2017 to 2021) are not linked. Review for archival.
 
 ## Status log
 
