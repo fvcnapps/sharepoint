@@ -6,7 +6,13 @@
 
 ## 1. Install the tenant theme
 
-Custom themes cannot be created in the admin center UI. Install once, tenant-wide, with one of the three methods in `theme/README.md`. From a Mac with no PowerShell, use the browser console method in `theme/add-tenant-theme.js`.
+Custom themes cannot be created in the admin center UI. Install once, tenant-wide, as the service principal:
+
+```bash
+./scripts/spo-admin/spo_admin.py theme add --name TVC --palette theme/tvc.theme.json
+```
+
+Setup for that tool is in `service-principal-admin.md`. The browser console and PowerShell alternatives in `theme/README.md` remain as fallbacks.
 
 Verify: admin center > **Settings** > **Themes** lists **TVC**. Optionally hide the Microsoft defaults there so site owners see only ours.
 
@@ -68,7 +74,13 @@ Not linked on purpose: TVN Leadership and TVN Regular Volunteers (working sites 
 
 ## 4. Associate the sites
 
-Admin center > Active sites > select a row > **Hub** > **Associate with a hub** > TVC Hub. Do every site in the table above. Each association takes a minute to apply the theme and show the hub nav.
+As the service principal, one line per site (the loop is in `service-principal-admin.md`):
+
+```bash
+./scripts/spo-admin/spo_admin.py hub associate https://fvcn.sharepoint.com/sites/PottstownCampus --hub https://fvcn.sharepoint.com
+```
+
+Browser fallback: admin center > Active sites > select a row > **Hub** > **Associate with a hub** > TVC Hub. Each association takes a minute to apply the theme and show the hub nav.
 
 Also allow site owners to self-associate later: root row > **Hub** > **Edit hub site settings** > leave "People who can associate sites with this hub" empty.
 

@@ -1,0 +1,8 @@
+# private keys and certificates never go in the repo
+*.pem
+*.key
+*.pfx
+*.crt
+*.cer
+.env
+__pycache__/

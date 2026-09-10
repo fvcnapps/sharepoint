@@ -16,7 +16,13 @@ Contrast: white on primary 9.8:1, primary on off-white 9.0:1, body text on off-w
 
 ## Install
 
-Pick one.
+Default is the service principal:
+
+```bash
+./scripts/spo-admin/spo_admin.py theme add --name TVC --palette theme/tvc.theme.json
+```
+
+Fallbacks if that is not set up yet:
 
 - **Browser, no tooling.** Follow the comments at the top of `add-tenant-theme.js`.
 - **Windows PowerShell.**

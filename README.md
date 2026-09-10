@@ -9,7 +9,10 @@ Application code does not live here. VillageOps is in `fvcnapps/tvc-work-orders`
 | Path | What it is |
 |------|------------|
 | `runbooks/` | Step-by-step procedures with the reasoning behind them. Read these first. |
-| `scripts/` | PowerShell run from an admin's machine. Every script prompts before changing anything. |
+| `scripts/spo-admin/` | **Default admin path.** Python CLI that makes tenant changes as a service principal. See `runbooks/service-principal-admin.md`. |
+| `scripts/` | PowerShell alternatives for when a person must run something interactively. |
+| `theme/` | The TVC tenant theme palette and installers. |
+| `brand/` | Brand guide and logo files. |
 
 ## Current work
 
@@ -18,7 +21,11 @@ Application code does not live here. VillageOps is in `fvcnapps/tvc-work-orders`
 - Runbook: `runbooks/hub-site-tvchub.md`
 - Script: `scripts/TVCHub.ps1` with phases `Setup`, `Inspect`, `Create`, `Swap`, `Finish`
 
-## Prerequisites for scripts
+## How we administer SharePoint
+
+Changes are made by the `TVC SharePoint Admin (automation)` app registration through `scripts/spo-admin/spo_admin.py`. The admin center is for looking, not clicking. Reasons and setup are in `runbooks/service-principal-admin.md`.
+
+## Prerequisites for the PowerShell alternatives
 
 PowerShell 7.4 or later on macOS, Windows, or Linux.
 
