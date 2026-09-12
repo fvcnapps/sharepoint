@@ -14,11 +14,21 @@ Custom themes cannot be created in the admin center UI. Install once, tenant-wid
 
 Setup for that tool is in `service-principal-admin.md`. The browser console and PowerShell alternatives in `theme/README.md` remain as fallbacks.
 
-Verify: admin center > **Settings** > **Themes** lists **TVC**. Optionally hide the Microsoft defaults there so site owners see only ours.
+Verify with `spo_admin.py theme list` (installed 2026-09-11). Optionally hide the Microsoft defaults in admin center > **Settings** > **Themes** so site owners see only ours.
 
 ## 2. Apply it on the hub
 
-On `https://fvcn.sharepoint.com`: gear > **Change the look**.
+Default is the tool; each line is idempotent. Done on the hub 2026-09-11.
+
+```bash
+./scripts/spo-admin/spo_admin.py theme apply https://fvcn.sharepoint.com --name TVC --palette theme/tvc.theme.json
+./scripts/spo-admin/spo_admin.py web set https://fvcn.sharepoint.com --header-layout compact --header-emphasis strong \
+    --mega-menu on --nav-audience-targeting on --footer on --footer-layout simple --footer-emphasis neutral
+./scripts/spo-admin/spo_admin.py logo set https://fvcn.sharepoint.com --header brand/logo/fvc-icon-white.png --thumbnail brand/logo/fvc-icon-color.png
+./scripts/spo-admin/spo_admin.py web get https://fvcn.sharepoint.com
+```
+
+The browser equivalent, and the reasoning behind each value: on `https://fvcn.sharepoint.com`, gear > **Change the look**.
 
 | Panel | Setting | Value | Why |
 |-------|---------|-------|-----|
@@ -39,7 +49,14 @@ Associated sites inherit the theme automatically. Site owners on associated site
 
 ## 3. Build the hub navigation
 
-Hub navigation appears above every associated site's own nav. Edit it on the hub: **Edit** at the right end of the hub nav bar. Build these top-level labels with the links under them. Mission order guides the grouping: Celebrate (worship and services), Connect (campuses and ministries), Care (outreach and support).
+Hub navigation appears above every associated site's own nav. It is stored as the hub web's top navigation bar, so it is data we can version: `nav/hub-nav.json` holds the tree below, and the tool applies it.
+
+```bash
+./scripts/spo-admin/spo_admin.py nav apply https://fvcn.sharepoint.com --spec nav/hub-nav.json   # add --prune to delete links not in the file
+./scripts/spo-admin/spo_admin.py nav get   https://fvcn.sharepoint.com
+```
+
+Edit the JSON, re-run, commit. Browser fallback: **Edit** at the right end of the hub nav bar on the hub. Build these top-level labels with the links under them. Mission order guides the grouping: Celebrate (worship and services), Connect (campuses and ministries), Care (outreach and support).
 
 | Top level | Link label | URL | Audience |
 |-----------|-----------|-----|----------|
@@ -68,13 +85,15 @@ Hub navigation appears above every associated site's own nav. Edit it on the hub
 | | Leadership Team | `/sites/LeadershipTeam` | Leadership Team group |
 | | Church Board | `/sites/ChurchBoard` | Church Board group |
 
-How to set audiences: while editing a link, the **Audiences to target** field accepts Microsoft 365 groups and security groups, up to ten per link. Each Teams-connected site already has a group of the same name; use it. A link with no audience is visible to everyone who can reach the hub. Audience targeting hides the link; it does not grant or remove permission to the site itself.
+The **Staff** heading itself is also targeted to the Staff group so people outside staff do not see an empty heading. Group ids are in the `audiences` block of `nav/hub-nav.json`; they are the Microsoft 365 groups behind the three Teams-connected sites (read from each site's `GroupId`).
+
+How to set audiences in the browser: while editing a link, the **Audiences to target** field accepts Microsoft 365 groups and security groups, up to ten per link. Each Teams-connected site already has a group of the same name; use it. A link with no audience is visible to everyone who can reach the hub. Audience targeting hides the link; it does not grant or remove permission to the site itself.
 
 Not linked on purpose: TVN Leadership and TVN Regular Volunteers (working sites reachable from The Village Norristown's own nav) and every site from 2017 to 2021 (Admin, ALLSTAFF, PASTORS, SERMONS, PROGRAMS, and the rest). Review those for archival after launch.
 
 ## 4. Associate the sites
 
-As the service principal, one line per site (the loop is in `service-principal-admin.md`):
+Done for all 21 sites on 2026-09-11. As the service principal, one line per site (the loop is in `service-principal-admin.md`):
 
 ```bash
 ./scripts/spo-admin/spo_admin.py hub associate https://fvcn.sharepoint.com/sites/PottstownCampus --hub https://fvcn.sharepoint.com
@@ -90,10 +109,16 @@ Open the hub on a phone. The mega menu collapses into a hamburger; confirm the f
 
 ## Adding a campus later
 
-1. Create the site (Communication site for public-facing campus pages, team site if it is mainly a working space).
-2. Associate it with TVC Hub.
-3. Add one link under **Campuses** in the hub nav.
-4. Nothing else. Theme and header are inherited.
+Three commands. Theme and header are inherited, nothing else to do.
+
+```bash
+./scripts/spo-admin/spo_admin.py site create --url https://fvcn.sharepoint.com/sites/NewCampus --title "New Campus" \
+    --type communication --owner <upn> --hub https://fvcn.sharepoint.com
+# then add one line under Campuses in nav/hub-nav.json and
+./scripts/spo-admin/spo_admin.py nav apply https://fvcn.sharepoint.com --spec nav/hub-nav.json
+```
+
+Communication site for public-facing campus pages, team site if it is mainly a working space. `--hub` associates at creation; `hub associate` does it afterwards.
 
 ## Notes
 

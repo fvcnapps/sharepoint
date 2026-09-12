@@ -205,6 +205,10 @@ Notes:
 - **2026-09-10** TVC Hub created at `/sites/TVCHub` from the admin center. Registered as a hub site. Our service principal apps were added as site admins so automation can manage it app-only. Root swap: pending. Home site: pending. Associations: pending until after the swap, since unregistering a hub for the swap drops every association.
 - **2026-09-10, later** Hub unregistered, Replace site run from the admin center. `https://fvcn.sharepoint.com` is now TVC Hub. Classic root archived at `/sites/ClassicRoot-Archive`; `/sites/TVCHub` redirects to the root. "Register as hub site" was greyed out for a while after the swap (stale hub record), then worked after a fresh sign-in and a wait. Root is registered as the hub. Pending: home site, archive reachability check, Fairview Campus site, associations, theme and navigation.
 
+- **2026-09-11** Service principal path is live. `TVC SharePoint Admin (automation)` app created with the Azure CLI, certificate uploaded, SharePoint `Sites.FullControl.All` consented (details in `service-principal-admin.md`). Smoke tests passed. Then, all through `spo_admin.py`: TVC tenant theme installed; home site set to the root (`SetSPHSite` wanted `siteUrl`, fixed in the tool); all 21 campus, ministry, department, and staff sites from the navigation list associated with the hub in one loop, no errors. On the hub itself: TVC theme applied, header emphasis Strong, compact layout and mega menu confirmed, white icon set as header logo and color icon as thumbnail, navigation audience targeting enabled. Hub navigation build and Fairview Campus site: in progress the same day.
+
 ### Lesson
 
 After Replace site, expect the Hub command to be greyed out on the new root for up to an hour. Sign in fresh and wait. Do not create a second hub or re-run the swap.
+
+Once the service principal exists, the admin center is not needed for hubs, associations, home site, or themes. The REST parameter names differ from the PowerShell ones in places (`siteUrl`, not `sphSiteUrl`); `service-principal-admin.md` keeps the verified list.

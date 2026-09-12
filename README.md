@@ -12,11 +12,12 @@ Application code does not live here. VillageOps is in `fvcnapps/tvc-work-orders`
 | `scripts/spo-admin/` | **Default admin path.** Python CLI that makes tenant changes as a service principal. See `runbooks/service-principal-admin.md`. |
 | `scripts/` | PowerShell alternatives for when a person must run something interactively. |
 | `theme/` | The TVC tenant theme palette and installers. |
+| `nav/` | The hub navigation as data (`hub-nav.json`), applied with `spo_admin.py nav apply`. |
 | `brand/` | Brand guide and logo files. |
 
 ## Current work
 
-**TVC Hub** – a Communication site built at `/sites/TVCHub`, swapped into the tenant root before launch, and registered as the hub and home site. Campus and department sites associate to it. Pottstown is `/sites/PottstownCampus`; Fairview needs a campus site created.
+**TVC Hub** – a Communication site built at `/sites/TVCHub`, swapped into the tenant root, registered as the hub and home site, themed, with 21 campus, ministry, department, and staff sites associated (2026-09-11). Pottstown is `/sites/PottstownCampus`; Fairview is `/sites/FairviewCampus`.
 
 - Runbook: `runbooks/hub-site-tvchub.md`
 - Script: `scripts/TVCHub.ps1` with phases `Setup`, `Inspect`, `Create`, `Swap`, `Finish`
@@ -24,6 +25,13 @@ Application code does not live here. VillageOps is in `fvcnapps/tvc-work-orders`
 ## How we administer SharePoint
 
 Changes are made by the `TVC SharePoint Admin (automation)` app registration through `scripts/spo-admin/spo_admin.py`. The admin center is for looking, not clicking. Reasons and setup are in `runbooks/service-principal-admin.md`.
+
+```bash
+source ~/.config/tvc/spo-admin.env          # SPO_* variables; the private key stays in ~/.config/tvc
+.venv/bin/python scripts/spo-admin/spo_admin.py hub list
+```
+
+First time on a machine: `python3 -m venv .venv && .venv/bin/pip install -r scripts/spo-admin/requirements.txt`.
 
 ## Prerequisites for the PowerShell alternatives
 
