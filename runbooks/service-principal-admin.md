@@ -130,13 +130,19 @@ Recorded so nobody has to rediscover them. Host is `https://fvcn.sharepoint.com`
 | Header, menu, footer, audience flags | `POST /_api/web` with `X-HTTP-Method: MERGE`, `IF-MATCH: *` | `HeaderLayout` 2 = Compact, `HeaderEmphasis` 3 = Strong, `MegaMenuEnabled`, `NavAudienceTargetingEnabled`, `FooterEnabled`. |
 | Site logo | upload PNG to `/SiteAssets`, then `POST /_api/siteiconmanager/setsitelogo` `{"relativeLogoUrl","type":0,"aspect":N}` | aspect 1 = rectangular header logo (stored in web property `RectSiteLogoUrl`); aspect 0 = square thumbnail (`SiteLogoUrl`). |
 | Hub navigation | `POST /_api/web/navigation/TopNavigationBar` and `.../GetNodeById(id)/Children` | The hub web's top navigation bar **is** the hub navigation; `GET /_api/web/HubSiteData` reflects it. Nodes carry `AudienceIds`. |
-| Hub association | `POST {site}/_api/site/JoinHubSite('{hubId}')` | worked for all 21 sites in the list, no throttling. |
+| Hub navigation writes | `POST /_api/navigation/SaveMenuState` on `menuNodeKey='1002'` (what the nav editor uses); MERGE and DELETE on `/_api/web/navigation/GetNodeById(id)` | `GetNodeById(id)/Children` POST rejects links to other site collections with a 500 "no such file or folder"; SaveMenuState accepts them and carries `AudienceIds` and `OpenInNewWindow`. Omitting a node from a saved state does not delete it. |
+| Footer title | `GET /_api/navigation/MenuState?menuNodeKey='13b7c916-4fea-4bb2-8994-5cf274aeb530'`, written with `SaveMenuState` | from PnP.Framework `NavigationExtensions.cs`; the `mapProviderName` form is wrong for the footer. |
+| Hub record (logo, title, description) | admin `POST /_api/HubSites/GetById('{id}')` MERGE `{"LogoUrl","Title","Description"}` | site-level `HubSiteData` catches up within minutes. `isNavAudienceTargeted` there has no setter; it flips once the web flag is on and a nav write has happened. |
+| Site create (no group) | `POST /_api/SPSiteManager/create` `{"request":{Title,Url,Lcid,ShareByEmailEnabled,Description,WebTemplate,SiteDesignId,WebTemplateExtensionId,Owner,HubSiteId}}`; status `GET /_api/SPSiteManager/status?url='…'` | implemented, dry-run only so far. |
+| Group-connected site | `POST /_api/GroupSiteManager/CreateGroupEx` | **403 app-only**: SharePoint calls Entra as the app, which has no group permission. Create the group through Graph as a signed-in admin instead (`hub-theme-and-navigation.md`, Adding a campus). |
+| Tenant site lookup | admin `POST /_api/SPO.Tenant/GetSitePropertiesFromSharePointByFilters` `{"speFilter":{"IncludePersonalSite":0,"IncludeDetail":true,"Filter":"Url -like 'Archive'"}}` | `GET /_api/SPO.Tenant/sites` is not supported. Found the real archive URL of the classic root. |
+| Hub association | `POST {site}/_api/site/JoinHubSite('{hubId}')` | worked for all 22 sites, no throttling. |
 
 ## Where this goes next
 
 - **Key Vault.** Move the private key into Azure Key Vault and let the tool, VillageOps, or the campus agent fetch it with a managed identity. Then no laptop holds the key.
 - **Run from the campus agent.** The same calls work from any Azure Function or container with access to the key. Provisioning a new campus site becomes one agent action: create the site, associate it, add the nav link.
-- **Site provisioning.** Add `site create` (communication and team sites via `_api/SPSiteManager/create`) so the Fairview Campus site and future campuses are created the same way.
+- **Group-connected site provisioning app-only.** `site create` covers communication and plain team sites. Campus sites are group-connected, which needs Graph `Group.Create` on the app before it can run without a person.
 
 ## Troubleshooting
 

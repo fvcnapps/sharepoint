@@ -42,7 +42,7 @@ The browser equivalent, and the reasoning behind each value: on `https://fvcn.sh
 | | Site navigation visibility | On | |
 | | Site navigation audience targeting | On | needed for Staff, Leadership, Board links below |
 | **Footer** | Visibility | On, Simple layout | |
-| | Footer name | Celebrate · Connect · Care | tagline |
+| | Footer name | Celebrate · Connect · Care | tagline; set with `spo_admin.py footer set <hub> --title "Celebrate · Connect · Care"` (done 2026-09-11) |
 | | Footer background | Neutral | dark grey band, matches print footers |
 
 Associated sites inherit the theme automatically. Site owners on associated sites see the theme locked in Change the look. They keep their own header and logo.
@@ -56,7 +56,7 @@ Hub navigation appears above every associated site's own nav. It is stored as th
 ./scripts/spo-admin/spo_admin.py nav get   https://fvcn.sharepoint.com
 ```
 
-Edit the JSON, re-run, commit. Browser fallback: **Edit** at the right end of the hub nav bar on the hub. Build these top-level labels with the links under them. Mission order guides the grouping: Celebrate (worship and services), Connect (campuses and ministries), Care (outreach and support).
+Built 2026-09-11: 5 top-level groups, 23 links, audiences on the Staff group and its links, VillageOps opens in a new window. Edit the JSON, re-run, commit. Browser fallback: **Edit** at the right end of the hub nav bar on the hub. Build these top-level labels with the links under them. Mission order guides the grouping: Celebrate (worship and services), Connect (campuses and ministries), Care (outreach and support).
 
 | Top level | Link label | URL | Audience |
 |-----------|-----------|-----|----------|
@@ -109,16 +109,32 @@ Open the hub on a phone. The mega menu collapses into a hamburger; confirm the f
 
 ## Adding a campus later
 
-Three commands. Theme and header are inherited, nothing else to do.
+Theme, header, and hub bar are inherited; nothing to configure on the new site.
+
+**Group-connected team site (what Pottstown and Fairview are).** SharePoint refuses app-only group creation (`GroupSiteManager/CreateGroupEx` returns 403 because the admin app has no Graph group permission), so the group is created through Graph by a signed-in admin and everything after that runs as the service principal:
 
 ```bash
-./scripts/spo-admin/spo_admin.py site create --url https://fvcn.sharepoint.com/sites/NewCampus --title "New Campus" \
-    --type communication --owner <upn> --hub https://fvcn.sharepoint.com
-# then add one line under Campuses in nav/hub-nav.json and
+# 1. private Microsoft 365 group; SharePoint provisions /sites/<alias> from it
+az rest --method POST --url https://graph.microsoft.com/v1.0/groups --headers Content-Type=application/json --body '{
+  "displayName": "New Campus", "description": "New Campus", "mailNickname": "NewCampus",
+  "mailEnabled": true, "securityEnabled": false, "groupTypes": ["Unified"], "visibility": "Private",
+  "owners@odata.bind":  ["https://graph.microsoft.com/v1.0/users/<owner object id>"],
+  "members@odata.bind": ["https://graph.microsoft.com/v1.0/users/<owner object id>"] }'
+az rest --method GET --url "https://graph.microsoft.com/v1.0/groups/<group id>/sites/root"   # triggers provisioning; retry until webUrl appears
+# 2. associate, 3. one line under Campuses in nav/hub-nav.json, then
+./scripts/spo-admin/spo_admin.py hub associate https://fvcn.sharepoint.com/sites/NewCampus --hub https://fvcn.sharepoint.com
 ./scripts/spo-admin/spo_admin.py nav apply https://fvcn.sharepoint.com --spec nav/hub-nav.json
 ```
 
-Communication site for public-facing campus pages, team site if it is mainly a working space. `--hub` associates at creation; `hub associate` does it afterwards.
+Add a Team on top later from Teams > Create team > From a group, if the campus staff want chat. Groups created this way get a `@fvcn.onmicrosoft.com` address; change it in the Exchange admin center if the group will receive mail. If we want this fully app-only, grant the admin app Graph `Group.Create` (application) and add a `site create --type group` path; not done yet because it widens the app.
+
+**Communication site (public-facing pages, no group).** Fully service principal:
+
+```bash
+./scripts/spo-admin/spo_admin.py site create --url https://fvcn.sharepoint.com/sites/NewCampus --title "New Campus" \
+    --type communication --owner <upn> --hub https://fvcn.sharepoint.com --yes     # --hub associates at creation
+./scripts/spo-admin/spo_admin.py nav apply https://fvcn.sharepoint.com --spec nav/hub-nav.json
+```
 
 ## Notes
 

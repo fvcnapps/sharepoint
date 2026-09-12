@@ -1,0 +1,141 @@
+{
+  "audiences": {
+    "staff": "bb48223d-35ef-4dd5-a7a8-d587c901abc2",
+    "leadership": "604f2d33-da0b-40fa-a822-ac23f60ee7b2",
+    "board": "2cbc371c-f223-4765-9e99-83554849c89c"
+  },
+  "nodes": [
+    {
+      "title": "Home",
+      "url": "/"
+    },
+    {
+      "title": "Campuses",
+      "children": [
+        {
+          "title": "Fairview",
+          "url": "/sites/FairviewCampus"
+        },
+        {
+          "title": "Pottstown",
+          "url": "/sites/PottstownCampus"
+        }
+      ]
+    },
+    {
+      "title": "Ministries",
+      "children": [
+        {
+          "title": "Kids",
+          "url": "/sites/KidsMinistry"
+        },
+        {
+          "title": "Youth",
+          "url": "/sites/YouthMinistry"
+        },
+        {
+          "title": "Young Adults",
+          "url": "/sites/YoungAdultsMin"
+        },
+        {
+          "title": "Adults",
+          "url": "/sites/AdultMInistries"
+        },
+        {
+          "title": "Worship Arts",
+          "url": "/sites/WorshipArts2"
+        },
+        {
+          "title": "Counseling Center",
+          "url": "/sites/CounselingCenter"
+        },
+        {
+          "title": "Early Learning Center",
+          "url": "/sites/EarlyLearningCenter"
+        },
+        {
+          "title": "The Village Norristown",
+          "url": "/sites/TheVillageNorristown"
+        },
+        {
+          "title": "Homeless Ministry",
+          "url": "/sites/homeless.ministry"
+        }
+      ]
+    },
+    {
+      "title": "Departments",
+      "children": [
+        {
+          "title": "Communications",
+          "url": "/sites/Communications"
+        },
+        {
+          "title": "Events",
+          "url": "/sites/ExternalEvents"
+        },
+        {
+          "title": "Facilities",
+          "url": "/sites/Facilities186"
+        },
+        {
+          "title": "Finance / HR",
+          "url": "/sites/FinanceHR"
+        },
+        {
+          "title": "Information Technology",
+          "url": "/sites/InformationTechnology"
+        },
+        {
+          "title": "Office Admins",
+          "url": "/sites/OfficeAdmins"
+        },
+        {
+          "title": "A/V Production",
+          "url": "/sites/AV-Production"
+        },
+        {
+          "title": "Sunday Services",
+          "url": "/sites/SundayServices"
+        }
+      ]
+    },
+    {
+      "title": "Staff",
+      "audiences": [
+        "staff"
+      ],
+      "children": [
+        {
+          "title": "Staff Team",
+          "url": "/sites/TheVillageChurch-Staff",
+          "audiences": [
+            "staff"
+          ]
+        },
+        {
+          "title": "VillageOps",
+          "url": "https://workorders.fvcn.org/",
+          "new_window": true,
+          "audiences": [
+            "staff"
+          ]
+        },
+        {
+          "title": "Leadership Team",
+          "url": "/sites/LeadershipTeam",
+          "audiences": [
+            "leadership"
+          ]
+        },
+        {
+          "title": "Church Board",
+          "url": "/sites/ChurchBoard",
+          "audiences": [
+            "board"
+          ]
+        }
+      ]
+    }
+  ]
+}
