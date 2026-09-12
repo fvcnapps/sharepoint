@@ -22,6 +22,7 @@ Usage:
   spo_admin.py hub   register  https://fvcn.sharepoint.com --title "TVC Hub"
   spo_admin.py hub   associate https://fvcn.sharepoint.com/sites/PottstownCampus --hub https://fvcn.sharepoint.com
   spo_admin.py hub   disassociate https://fvcn.sharepoint.com/sites/PottstownCampus
+  spo_admin.py home-site get
   spo_admin.py home-site set https://fvcn.sharepoint.com
 """
 import argparse, json, os, sys
@@ -145,8 +146,15 @@ def hub_disassociate(a):
     print(f"disassociated {a.url}")
 
 
+def home_site_get(_):
+    # Returns null until a home site has been set.
+    print(json.dumps(call(f"{admin_url()}/_api/SPHSite/Details"), indent=2))
+
+
 def home_site_set(a):
-    print(json.dumps(call(f"{admin_url()}/_api/SPHSite/SetSPHSite", "POST", {"sphSiteUrl": a.url}), indent=2))
+    # The parameter is siteUrl. sphSiteUrl (the CSOM name) is rejected: "does not exist in method SetSPHSite".
+    # Returns the site id on success.
+    print(json.dumps(call(f"{admin_url()}/_api/SPHSite/SetSPHSite", "POST", {"siteUrl": a.url}), indent=2))
 
 
 # ---- cli --------------------------------------------------------------------
@@ -172,6 +180,7 @@ def main():
     x = h.add_parser("disassociate"); x.add_argument("url"); x.set_defaults(fn=hub_disassociate)
 
     hs = sub.add_parser("home-site").add_subparsers(dest="cmd", required=True)
+    hs.add_parser("get").set_defaults(fn=home_site_get)
     x = hs.add_parser("set"); x.add_argument("url"); x.set_defaults(fn=home_site_set)
 
     a = p.parse_args()

@@ -6,3 +6,4 @@
 *.cer
 .env
 __pycache__/
+.venv/
